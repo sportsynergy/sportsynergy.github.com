@@ -1,0 +1,11 @@
+title: Sportsynergy
+author: Panoramedia
+email: panoramedia@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  Online Court Reservations
+
+twitter_username: macrod68
+github_username:  macrod68
+
+sass:
+    style: compressed
