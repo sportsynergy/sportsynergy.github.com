@@ -1,30 +1,46 @@
 ---
-layout: default
+layout: page
 ---
-<div class="container">
-    <div class="section">
-    <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+<div class="blog-post text-container">
+	{% include post-title.html post=page %}
 
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">{{ page.title | escape }}</h1>
-        <p class="post-meta">
-          <time datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
-            {% assign date_format = site.minima.date_format | default: "%b %-d, %Y" %}
-            {{ page.date | date: date_format }}
-          </time>
-          {% if page.author %}
-            • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">{{ page.author }}</span></span>
-          {% endif %}</p>
-      </header>
+	<p class="editor-link"><a href="cloudcannon:collections/{{ page.path }}" class="btn"><strong>&#9998;</strong> Edit Post</a></p>
+	<div class="post-content">
+		{{ content }}
 
-      <div class="post-content" itemprop="articleBody">
-        {{ content }}
-      </div>
+		<div class="author">
+			{% assign author_id = page.author_staff_member | prepend: "/staff_members/" | append: "/" %}
+			{% assign author = site.staff_members | where: "url", author_id | first %}
+			<div class="square-image"><img src="{% include relative-src.html src=author.image_path %}" alt="{{ author.name }}"/></div>
+			<p class="blurb">{{ author.blurb }}</p>
+		</div>
 
-      {% if site.disqus.shortname %}
-        {% include disqus_comments.html %}
-      {% endif %}
-    </article>
-    </div>
+		<div class="blog-navigation">
+			{% if page.previous.url %}
+				<a class="prev" href="{% include relative-src.html src=page.previous.url %}">&laquo; {{ page.previous.title }}</a>
+			{% endif %}
+			{% if page.next.url %}
+				<a class="next" href="{% include relative-src.html src=page.next.url %}">{{ page.next.title }} &raquo;</a>
+			{% endif %}
+		</div>
+
+		{% if site.disqus_shortname and page.comments %}
+			<div id="disqus_thread"></div>
+			<script>
+				var disqus_shortname = '{{ site.disqus_shortname }}';
+				var disqus_config = function () {
+					this.page.url = "{{ page.url | prepend: site.url }}";
+					this.page.identifier = "{{ page.id }}";
+				};
+
+				(function() {  // DON'T EDIT BELOW THIS LINE
+					var d = document, s = d.createElement('script');
+					s.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+					s.setAttribute('data-timestamp', +new Date());
+					(d.head || d.body).appendChild(s);
+				})();
+			</script>
+			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+		{% endif %}
+	</div>
 </div>
-<script>$('.carousel.carousel-slider').carousel({fullWidth: true});</script>

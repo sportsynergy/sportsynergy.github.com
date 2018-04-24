@@ -1,0 +1,30 @@
+---
+title: Pricing
+heading: Find the perfect plan for your business
+description: The rates are discussed and negotiated upon consultation. Consultation usually means waiting to find out that the service is over-priced and without much support. Not the case with us.  We are reasonably and competitively  priced. And, you don’t have to worry about installing any software or maintenance – we do all of that.  All you have to do is pay for what you use, which usually ends up being around 20 bucks a court per month.  We recommend installations in increments of 6 months. All of this allows you to be more flexible, which ultimately results in a very satisfied customer.
+
+faq:
+  - question: What types of payment do you accept?
+    answer: Credit cards including MasterCard, Visa or American Express.
+  - question: Can I change my plan at a later time?
+    answer: Yes, you can upgrade and downgrade your plan at anytime.
+  - question: Do you offer pricing for nonprofit organizations?
+    answer: Yes, send us a message and we'll set you up on our nonprofit pricing.
+  - question: Questions?
+    answer: Contact us for any further questions at <a href="#">sales@sportsynergy.net</a>.
+---
+<div class="plans">
+
+</div>
+
+{% if page.faq %}
+	<h2>Pricing FAQ</h2>
+	<dl class="faq">
+		{% for item in page.faq %}
+			<div>
+				<dt>{{ item.question }}</dt>
+				<dd>{{ item.answer }}</dd>
+			</div>
+		{% endfor %}
+	</dl>
+{% endif %}
