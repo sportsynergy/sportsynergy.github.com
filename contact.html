@@ -1,7 +1,7 @@
 ---
 title: Contact
 heading: Get in touch today
-description: We'd love to help your racquet program.
+description: We'd love to help you breathe new life into your racquet program.
 
 map:
   latitude: 40.5244907
@@ -12,8 +12,9 @@ map:
 <div class="map" id="map"></div>
 
 
-<div class="contact-box">
-	<form action="{{ site.baseurl }}/contact-success/" method="post" class="contact-form">
+
+<div class="contact-box" >
+	<form action="https://vw1uhicmx1.execute-api.us-east-1.amazonaws.com/Prod" method="post" class="contact-form" id="contact-form" >
 		<input type="hidden" name="_to" value="support@sportsynergy.net" />
 		<input type="text" name="_gotcha" style="display: none;">
 
@@ -26,7 +27,7 @@ map:
 		<label for="message">Message</label>
 		<textarea name="message" id="message" placeholder="Enter your message..."></textarea>
 
-		<input type="submit" value="Send Message" />
+		<input type="submit" value="Send Message" id="sendmessage"/>
 	</form>
 
 	<div class="contact-details">
@@ -34,11 +35,27 @@ map:
 		<address><a target="_blank" href="https://www.google.com/maps/place/{{ page.map.address | url_encode }}">{{ page.map.address | replace: ", ", ", <br>" }}</a></address>
 
 		<h3 class="editable">Email</h3>
-		<p><a href="mailto:support@sportsynergy.net">support@sportsynergy.net</a></p>
+		<p><a href="mailto:hello@sportsynergy.net">hello@sportsynergy.net</a></p>
 	</div>
 </div>
 
 <script type="text/javascript">
+	
+
+
+	$( "#sendmessage" ).click(function() {
+	  $.post($("#contact-us-form").attr('action'), JSON.stringify({
+		    name: $("#contact-us-form input[name='name']").val(),
+		    email: $("#contact-us-form input[name='email']").val(),
+		    phone: $("#contact-us-form input[name='phone']").val(),
+		    message: $("#contact-us-form textarea[name='message']").val(),
+		    'g-recaptcha-response': $("#contact-us-form textarea[name='g-recaptcha-response']").val()
+		}), function (data) {
+		    $(".thanks").show();
+		    //$("#sendmessage").hide();
+		}, 'json');
+	});
+
 	window.mapData = {{ page.map | jsonify }};
 
 	function initMap() {
@@ -173,6 +190,8 @@ map:
 		google.maps.event.addDomListener(window, "resize", function () {
 			map.setCenter(myOptions.center);
 		});
+
+
 	}
 </script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ site.google_maps_javascript_api_key }}&amp;callback=initMap"></script>
