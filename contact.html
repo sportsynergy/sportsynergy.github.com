@@ -13,10 +13,15 @@ map:
 
 
 
+
 <div class="contact-box" >
+	
+
+	
 	<form action="https://vw1uhicmx1.execute-api.us-east-1.amazonaws.com/Prod" method="post" class="contact-form" id="contact-form" >
-		<input type="hidden" name="_to" value="support@sportsynergy.net" />
-		<input type="text" name="_gotcha" style="display: none;">
+
+		<div id="form-messages"></div>
+
 
 		<label for="name">Full Name</label>
 		<input type="text" name="name" id="name" placeholder="Enter your name..." />
@@ -28,32 +33,65 @@ map:
 		<textarea name="message" id="message" placeholder="Enter your message..."></textarea>
 
 		<input type="submit" value="Send Message" id="sendmessage"/>
+		<div class="g-recaptcha" data-sitekey="6LfnlFYUAAAAAP6s7NnMjqCKNZGC9_1-76PEyhVF"></div>
 	</form>
+
 
 	<div class="contact-details">
 		<h3 class="editable">Address</h3>
 		<address><a target="_blank" href="https://www.google.com/maps/place/{{ page.map.address | url_encode }}">{{ page.map.address | replace: ", ", ", <br>" }}</a></address>
 
-		<h3 class="editable">Email</h3>
-		<p><a href="mailto:hello@sportsynergy.net">hello@sportsynergy.net</a></p>
+
+		
+
 	</div>
 </div>
 
 <script type="text/javascript">
 	
+	var contactForm = $('#contact-form');
+	var formMessages = $('#form-messages');
+
+	contactForm.submit(function(e){
+
+		e.preventDefault();
+
+	   $.ajax({
+        url: contactForm.attr('action'),
+        method: contactForm.attr('method'),
+        data: JSON.stringify({
+		    name: $("#contact-form input[name='name']").val(),
+		    email: $("#contact-form input[name='email']").val(),
+		    phone: $("#contact-form input[name='phone']").val(),
+		    message: $("#contact-form textarea[name='message']").val(),
+		    'g-recaptcha-response': $("#contact-form textarea[name='g-recaptcha-response']").val()})
+        ,
+        dataType: 'json',
+        beforeSend: function() {
+          formMessages.append('<div class="alert-loading">Sending message...</div>');
+        },
+        success: function(data) {
+          formMessages.find('.alert-loading').remove();
+          var succesBox = $('<div><strong>Thanks!</strong> I will reply in a few hours</div>').hide();
+          formMessages.before(succesBox);
+          succesBox.fadeIn("slow");
+          succesBox.fadeTo(2000, 500).slideUp(500, function() {
+            $(".alert-success").alert('close');
+          });
+        },
+        error: function(err) {
+          formMessages.find('.alert-loading').remove();
+          var errorBox = $('<div class="alert-loading" >Something went wrong.</div>').hide();
+          formMessages.before(errorBox);
+          errorBox.fadeIn("slow");
+          errorBox.fadeTo(2000, 500).slideUp(700, function() {
+            //$(".alert-danger").alert('close');
+            console.log("closing...");
+          });
+        }
+      });
 
 
-	$( "#sendmessage" ).click(function() {
-	  $.post($("#contact-us-form").attr('action'), JSON.stringify({
-		    name: $("#contact-us-form input[name='name']").val(),
-		    email: $("#contact-us-form input[name='email']").val(),
-		    phone: $("#contact-us-form input[name='phone']").val(),
-		    message: $("#contact-us-form textarea[name='message']").val(),
-		    'g-recaptcha-response': $("#contact-us-form textarea[name='g-recaptcha-response']").val()
-		}), function (data) {
-		    $(".thanks").show();
-		    //$("#sendmessage").hide();
-		}, 'json');
 	});
 
 	window.mapData = {{ page.map | jsonify }};
@@ -194,4 +232,5 @@ map:
 
 	}
 </script>
+
 <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ site.google_maps_javascript_api_key }}&amp;callback=initMap"></script>
