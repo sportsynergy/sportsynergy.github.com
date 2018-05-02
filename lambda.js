@@ -9,15 +9,12 @@ exports.handler = function (event, context, callback) {
     console.log(JSON.stringify(event));
     
     // Validate the recaptcha
-    var dummy = "http://www.example.com/?" // this is not pretty
-    var url_parts = url.parse(dummy+event.body, true);
-    var input_data = url_parts.query;
+    var input_data = JSON.parse(event.body);
     var postData = querystring.stringify({
         'secret': process.env.ReCaptchaSecret,
         'response': input_data['g-recaptcha-response']
     });
     
-
     var message = "";
     Object.keys(input_data).forEach(function(key) {
        message += key+':\n';
