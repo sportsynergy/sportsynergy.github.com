@@ -24,8 +24,5 @@ For Google’s calendar it works in a similar way. For doing it this way, Open G
 
 ![Google is a computer another successful company](/images/calendar2.png)
 
-the history of marketing thought, giving theoretical accounts
-marketing history, focusing on the history of marketing practice
-This division parallels the distinction between the history of economic thought and economic history.
-
+There you have it. Enjoy. Please let us know if you have any questions by  shooting us an email here: <a href="mailto:support@sportsynergy.net">support@sportsynergy.net</a>
 
